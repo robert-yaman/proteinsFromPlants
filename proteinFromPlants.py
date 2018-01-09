@@ -10,7 +10,7 @@ sys.path.insert(1, os.path.join(sys.path[0], './objects'))
 
 from sequenceSet import SequenceSet
 
-def main(start_seq, transformations, target_seq, max_length):
+def main(start_seqs, transformation_modules, target_seq, max_length):
 	def process(sequence_set, transformation_chain):
 		# Returns transformation chain that yields the target seq, or None if
 		# there is none.
@@ -18,29 +18,31 @@ def main(start_seq, transformations, target_seq, max_length):
 			print "ERROR: length %d greater than max length %d." % (
 				len(transformation_chain), max_length)
 		
-		if sequence_set.contains(target_seq):
+		params = {
+			"start_seqs" : start_seqs,
+			"sequence_set" : sequence_set,
+		}
+		if sequence_set.isExactly(target_seq):
 			return transformation_chain
 		elif len(transformation_chain) == max_length:
 			return None
 		else:
 			answer = None
-			for transformation_type in transformations:
-				transformation = transformation_type()
-				new_chain = transformation_chain + [transformation]
-				child_answer = process(transformation.transform(sequence_set), 
-					new_chain)
-				if not child_answer == None and len(child_answer) < len(answer):
-					answer = child_answer
+			for transformation_module in transformation_modules:
+				transformation_instances = (transformation_module.
+					transformations(params))
+				for transformation in transformation_instances:
+					new_chain = transformation_chain + [transformation]
+					child_answer = process(transformation.transform(
+						sequence_set), new_chain)
+					if not child_answer == None:
+						if answer == None or len(child_answer) < len(answer):
+							answer = child_answer
 			return answer
 
 	start_seq_set = SequenceSet()
 	start_seq_set.setFrequency(start_seq, 1)
-	print process(start_seq_set, [])
-
-
-
-
-
+	print [transformation.name() for transformation in process(start_seq_set, [])]
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
@@ -61,6 +63,7 @@ if __name__ == '__main__':
 	# Load passed in module.
 
 	start_seq = Seq("MASLPWSLTTSTAIANTTNISAFPPSPLFQRASHVPVARNRSRRFAPSKVSCNSANGDPNSDSTSDVRETSSGKLDRRNVLLGIGGLYGAAGGLGATKPLAFGAPIQAPDISKCGTATVPDGVTPTNCCPPVTTKIIDFQLPSSGSPMRTRPAAHLVSKEYLAKYKKAIELQKALPDDDPRSFKQQANVHCTYCQGAYDQVGYTDLELQVHASWLFLPFHRYYLYFNERILAKLIDDPTFALPYWAWDNPDGMYMPTIYASSPSSLYDEKRNAKHLPPTVIDLDYDGTEPTIPDDELKTDNLAIMYKQIVSGATTPKLFLGYPYRAGDAIDPGAGTLEHAPHNIVHKWTGLADKPSEDMGNFYTAGRDPIFFGHHANVDRMWNIWKTIGGKNRKDFTDTDWLDATFVFYDENKQLVKVKVSDCVDTSKLRYQYQDIPIPWLPKNTKAKAKTTTKSSKSGVAKAAELPKTTISSIGDFPKALNSVIRVEVPRPKKSRSKKEKEDEEEVLLIKGIELDRENFVKFDVYINDEDYSVSRPKNSEFAGSFVNVPHKHMKEMKTKTNLRFAINELLEDLGAEDDESVIVTIVPRAGGDDVTIGGIEIEFVSD", generic_protein)
-	target_seq = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
-	main(start_seq, transformations.TRANSFORMATIONS, 
+	# target_seq = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
+	target_seq = Seq("P", generic_protein)
+	main([start_seq], transformations.TRANSFORMATIONS, 
 		target_seq, args.max_length)

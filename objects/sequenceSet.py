@@ -30,3 +30,6 @@ class SequenceSet:
 
 	def contains(self, seq):
 		return self.frequency(seq) > 0
+
+	def isExactly(self, seq):
+		return len(self.sequences()) == 1 and self.contains(seq)

@@ -1,5 +1,7 @@
 import heatShock
+import purification
 
 TRANSFORMATIONS = [
-	heatShock.HeatShock,
+	heatShock,
+	purification,
 ]
