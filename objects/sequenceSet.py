@@ -27,3 +27,6 @@ class SequenceSet:
 
 	def sequences(self):
 		return [Seq(seq, generic_protein) for seq in self.frequency_dict.keys()]
+
+	def contains(self, seq):
+		return self.frequency(seq) > 0

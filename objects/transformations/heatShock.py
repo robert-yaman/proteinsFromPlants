@@ -1,10 +1,7 @@
-import os
-import sys
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 
 import transformation
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from cost import Cost
 from sequenceSet import SequenceSet
 

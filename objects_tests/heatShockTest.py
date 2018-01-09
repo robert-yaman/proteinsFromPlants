@@ -12,9 +12,6 @@ class HeatShockTest(unittest.TestCase):
 	def setUp(self):
 		self.heatShock = HeatShock()
 
-	def tearDown(self):
-		self.heatShock = None
-
 	def test_transform(self):
 		inputs_set = SequenceSet()
 		inputs_set.setFrequency(self._sequence("FTF"), 1)

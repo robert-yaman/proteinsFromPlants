@@ -1,0 +1,1 @@
+python proteinFromPlants.py --transformations objects.transformations.allTransformations
