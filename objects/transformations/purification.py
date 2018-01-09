@@ -21,7 +21,7 @@ class Purification(transformation.Transformation):
 		return output_aas
 
 	def cost(self):
-		return Cost(50)
+		return 50
 
 	def name(self):
 		return "Purify %s" % self.target_sequence

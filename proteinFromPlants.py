@@ -9,6 +9,7 @@ from Bio.Alphabet import generic_protein
 sys.path.insert(1, os.path.join(sys.path[0], './objects'))
 
 from sequenceSet import SequenceSet
+import report
 
 def main(start_seqs, transformation_modules, target_seq, max_length):
 	def process(sequence_set, transformation_chain):
@@ -42,7 +43,14 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 
 	start_seq_set = SequenceSet()
 	start_seq_set.setFrequency(start_seq, 1)
-	print [transformation.name() for transformation in process(start_seq_set, [])]
+	transformation_chain = process(start_seq_set, [])
+	print report.report(transformation_chain, total_cost(transformation_chain))
+
+def total_cost(transformation_chain):
+	if transformation_chain == None:
+		return 0
+	else:
+		return sum([transformation.cost() for transformation in transformation_chain])
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
@@ -64,6 +72,6 @@ if __name__ == '__main__':
 
 	start_seq = Seq("MASLPWSLTTSTAIANTTNISAFPPSPLFQRASHVPVARNRSRRFAPSKVSCNSANGDPNSDSTSDVRETSSGKLDRRNVLLGIGGLYGAAGGLGATKPLAFGAPIQAPDISKCGTATVPDGVTPTNCCPPVTTKIIDFQLPSSGSPMRTRPAAHLVSKEYLAKYKKAIELQKALPDDDPRSFKQQANVHCTYCQGAYDQVGYTDLELQVHASWLFLPFHRYYLYFNERILAKLIDDPTFALPYWAWDNPDGMYMPTIYASSPSSLYDEKRNAKHLPPTVIDLDYDGTEPTIPDDELKTDNLAIMYKQIVSGATTPKLFLGYPYRAGDAIDPGAGTLEHAPHNIVHKWTGLADKPSEDMGNFYTAGRDPIFFGHHANVDRMWNIWKTIGGKNRKDFTDTDWLDATFVFYDENKQLVKVKVSDCVDTSKLRYQYQDIPIPWLPKNTKAKAKTTTKSSKSGVAKAAELPKTTISSIGDFPKALNSVIRVEVPRPKKSRSKKEKEDEEEVLLIKGIELDRENFVKFDVYINDEDYSVSRPKNSEFAGSFVNVPHKHMKEMKTKTNLRFAINELLEDLGAEDDESVIVTIVPRAGGDDVTIGGIEIEFVSD", generic_protein)
 	# target_seq = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
-	target_seq = Seq("P", generic_protein)
+	target_seq = Seq("F", generic_protein)
 	main([start_seq], transformations.TRANSFORMATIONS, 
 		target_seq, args.max_length)
