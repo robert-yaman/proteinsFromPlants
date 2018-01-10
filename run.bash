@@ -1,1 +1,1 @@
-python proteinFromPlants.py --transformations objects.transformations.allTransformations --max-length 6
+python proteinFromPlants.py --transformations objects.transformations.allTransformations --max-length 7

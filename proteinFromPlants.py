@@ -1,4 +1,3 @@
-from sets import Set
 import argparse
 import importlib
 import time
@@ -14,9 +13,11 @@ from sequenceSet import SequenceSet
 import report
 
 def main(start_seqs, transformation_modules, target_seq, max_length):
-	processed_sets = Set()
-	def stop_search(sequence_set):
-		return sequence_set in processed_sets
+	distance_to_set = {}
+	def stop_search(sequence_set, transformation_chain):
+		if not sequence_set in distance_to_set:
+			return False
+		return distance_to_set[sequence_set] <= len(transformation_chain)
 
 	def process(sequence_set, transformation_chain):
 		# Returns transformation chain that yields the target seq, or None if
@@ -25,9 +26,9 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 			print "ERROR: length %d greater than max length %d." % (
 				len(transformation_chain), max_length)
 		
-		if stop_search(sequence_set):
+		if stop_search(sequence_set, transformation_chain):
 			return None
-		processed_sets.add(sequence_set)
+		distance_to_set[sequence_set] = len(transformation_chain)
 
 		params = {
 			"start_seqs" : start_seqs,
