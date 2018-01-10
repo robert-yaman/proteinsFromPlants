@@ -8,7 +8,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '../objects/'))
 from transformations.purification import Purification
 from sequenceSet import SequenceSet
 
-class purificationTest(unittest.TestCase):
+class PurificationTest(unittest.TestCase):
 	def setUp(self):
 		target_seq = Seq("A", generic_protein)
 		self.purification = Purification(target_seq)

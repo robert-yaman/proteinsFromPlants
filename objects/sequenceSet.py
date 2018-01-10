@@ -46,6 +46,9 @@ class SequenceSet:
 		else:
 			return self.frequency_dict[key]
 
+	def addFrequency(self, sequence, frequency):
+		self.setFrequency(sequence, self.frequency(sequence) + frequency)
+
 	def sequences(self):
 		return [Seq(seq, 
 			generic_protein) for seq in self.frequency_dict.keys()]
