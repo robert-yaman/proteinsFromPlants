@@ -4,14 +4,17 @@ import BNPSSkatole
 import caspase1
 import aspNEndopeptidase
 import heatShock
+import simpleCleavers
 import purification
 
 TRANSFORMATIONS = [
 	addProtein,
-	argCProteinase,
-	aspNEndopeptidase,
-	BNPSSkatole,
-	caspase1,
+	# Now in simply cleavers:
+	# argCProteinase,
+	# aspNEndopeptidase,
+	# BNPSSkatole,
+	# caspase1,
 	heatShock,
+	simpleCleavers,
 	purification,
 ]
