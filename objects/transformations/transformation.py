@@ -52,7 +52,7 @@ class Transformation:
 					p_relation_to_i = p - 3
 					p_index_on_sequence = i + p_relation_to_i
 					if (p_index_on_sequence < 0 or 
-						p_index_on_sequence > len(sequence)):
+						p_index_on_sequence >= len(sequence)):
 						if positive_list[p]:
 							# We require an amino acid to be here, but we are
 							# outisde of the sequence bounds. Don't cleave.
@@ -68,7 +68,7 @@ class Transformation:
 						cleave = False
 				if cleave:
 					if sequence in cleaveage_sites:
-						cleaveage_sitesp[sequence].append(i)
+						cleaveage_sites[sequence].append(i)
 					else:
 						cleaveage_sites[sequence] = [i]
 
