@@ -13,11 +13,12 @@ from sequenceSet import SequenceSet
 import report
 
 def main(start_seqs, transformation_modules, target_seq, max_length):
-	distance_to_set = {}
+	lowest_score_per_set = {}
 	def stop_search(sequence_set, transformation_chain):
-		if not sequence_set in distance_to_set:
+		if not sequence_set in lowest_score_per_set:
 			return False
-		return distance_to_set[sequence_set] <= len(transformation_chain)
+		return lowest_score_per_set[sequence_set] <= total_cost(
+			transformation_chain)
 
 	def process(sequence_set, transformation_chain):
 		# Returns transformation chain that yields the target seq, or None if
@@ -28,7 +29,7 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 		
 		if stop_search(sequence_set, transformation_chain):
 			return None
-		distance_to_set[sequence_set] = len(transformation_chain)
+		lowest_score_per_set[sequence_set] = total_cost(transformation_chain)
 
 		params = {
 			"start_seqs" : start_seqs,
