@@ -41,9 +41,7 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 							answer = child_answer
 			return answer
 
-	start_seq_set = SequenceSet()
-	start_seq_set.setFrequency(start_seq, 1)
-	transformation_chain = process(start_seq_set, [])
+	transformation_chain = process(SequenceSet(), [])
 	print report.report(transformation_chain, total_cost(transformation_chain))
 
 def total_cost(transformation_chain):
@@ -61,7 +59,7 @@ if __name__ == '__main__':
 		required=True,
 	)
 	parser.add_argument(
-		'--max_length',
+		'--max-length',
 		default=10,
 		type=int,
 	)
@@ -71,7 +69,7 @@ if __name__ == '__main__':
 	# Load passed in module.
 
 	start_seq = Seq("MASLPWSLTTSTAIANTTNISAFPPSPLFQRASHVPVARNRSRRFAPSKVSCNSANGDPNSDSTSDVRETSSGKLDRRNVLLGIGGLYGAAGGLGATKPLAFGAPIQAPDISKCGTATVPDGVTPTNCCPPVTTKIIDFQLPSSGSPMRTRPAAHLVSKEYLAKYKKAIELQKALPDDDPRSFKQQANVHCTYCQGAYDQVGYTDLELQVHASWLFLPFHRYYLYFNERILAKLIDDPTFALPYWAWDNPDGMYMPTIYASSPSSLYDEKRNAKHLPPTVIDLDYDGTEPTIPDDELKTDNLAIMYKQIVSGATTPKLFLGYPYRAGDAIDPGAGTLEHAPHNIVHKWTGLADKPSEDMGNFYTAGRDPIFFGHHANVDRMWNIWKTIGGKNRKDFTDTDWLDATFVFYDENKQLVKVKVSDCVDTSKLRYQYQDIPIPWLPKNTKAKAKTTTKSSKSGVAKAAELPKTTISSIGDFPKALNSVIRVEVPRPKKSRSKKEKEDEEEVLLIKGIELDRENFVKFDVYINDEDYSVSRPKNSEFAGSFVNVPHKHMKEMKTKTNLRFAINELLEDLGAEDDESVIVTIVPRAGGDDVTIGGIEIEFVSD", generic_protein)
-	# target_seq = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
+	start_seq2 = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
 	target_seq = Seq("F", generic_protein)
-	main([start_seq], transformations.TRANSFORMATIONS, 
+	main([start_seq, start_seq2], transformations.TRANSFORMATIONS, 
 		target_seq, args.max_length)
