@@ -11,6 +11,19 @@ class SequenceSet:
 	def __len__(self):
 		return len(self.frequency_dict)
 
+	def __hash__(self):
+		sorted_keys = self.frequency_dict.keys()
+		sorted_keys.sort()
+		hash_string = ""
+		for key in sorted_keys:
+			hash_string += "%s%d" % (key, self.frequency_dict[key])
+		return hash(hash_string)
+
+	def __eq__(self, other):
+		# Use internal struct for efficiency here. It's fine since it's an 
+		# internal method.
+		return self.frequency_dict == other.frequency_dict
+
 	def setFrequency(self, sequence, frequency):
 		if not type(sequence) == Seq:
 			print "ERROR: sequence should be Seq object: %s" %(
@@ -42,9 +55,3 @@ class SequenceSet:
 
 	def isExactly(self, seq):
 		return len(self.sequences()) == 1 and self.contains(seq)
-
-	def isEqual(self, other_set):
-		"""Efficient equality checker."""
-		# Use internal struct for efficiency here. It's fine since it's an 
-		# internal method.
-		return self.frequency_dict == other_set.frequency_dict

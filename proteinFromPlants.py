@@ -1,6 +1,7 @@
 from sets import Set
 import argparse
 import importlib
+import time
 import os
 import sys
 
@@ -27,10 +28,12 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 		if stop_search(sequence_set):
 			return None
 		processed_sets.add(sequence_set)
+
 		params = {
 			"start_seqs" : start_seqs,
 			"sequence_set" : sequence_set,
 		}
+
 		if sequence_set.isExactly(target_seq):
 			return transformation_chain
 		elif len(transformation_chain) == max_length:
@@ -49,8 +52,11 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 							answer = child_answer
 			return answer
 
+	start_time = time.time()
 	transformation_chain = process(SequenceSet(), [])
-	print report.report(transformation_chain, total_cost(transformation_chain))
+	time_elapsed = time.time() - start_time
+	print report.report(transformation_chain, 
+		total_cost(transformation_chain), time_elapsed)
 
 def total_cost(transformation_chain):
 	if transformation_chain == None:
