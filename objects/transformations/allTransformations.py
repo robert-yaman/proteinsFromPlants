@@ -4,7 +4,7 @@ import BNPSSkatole
 import caspase1
 import aspNEndopeptidase
 import heatShock
-import simpleCleavers
+import simpleCleaver
 import purification
 
 TRANSFORMATIONS = [
@@ -15,6 +15,6 @@ TRANSFORMATIONS = [
 	# BNPSSkatole,
 	# caspase1,
 	heatShock,
-	simpleCleavers,
+	simpleCleaver,
 	purification,
 ]
