@@ -12,7 +12,8 @@ sys.path.insert(1, os.path.join(sys.path[0], './objects'))
 from sequenceSet import SequenceSet
 import report
 
-def main(start_seqs, transformation_modules, target_seq, max_length):
+def findTransformations(start_seqs, transformation_modules, target_seq, 
+	max_length):
 	lowest_score_per_set = {}
 	def stop_search(sequence_set, transformation_chain):
 		if not sequence_set in lowest_score_per_set:
@@ -26,7 +27,6 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 		if len(transformation_chain) > max_length:
 			print "ERROR: length %d greater than max length %d." % (
 				len(transformation_chain), max_length)
-		
 		if stop_search(sequence_set, transformation_chain):
 			return None
 		lowest_score_per_set[sequence_set] = total_cost(transformation_chain)
@@ -57,8 +57,7 @@ def main(start_seqs, transformation_modules, target_seq, max_length):
 	start_time = time.time()
 	transformation_chain = process(SequenceSet(), [])
 	time_elapsed = time.time() - start_time
-	print report.report(transformation_chain, 
-		total_cost(transformation_chain), time_elapsed)
+	return transformation_chain, total_cost(transformation_chain), time_elapsed
 
 def total_cost(transformation_chain):
 	if transformation_chain == None:
@@ -87,5 +86,5 @@ if __name__ == '__main__':
 	start_seq = Seq("MASLPWSLTTSTAIANTTNISAFPPSPLFQRASHVPVARNRSRRFAPSKVSCNSANGDPNSDSTSDVRETSSGKLDRRNVLLGIGGLYGAAGGLGATKPLAFGAPIQAPDISKCGTATVPDGVTPTNCCPPVTTKIIDFQLPSSGSPMRTRPAAHLVSKEYLAKYKKAIELQKALPDDDPRSFKQQANVHCTYCQGAYDQVGYTDLELQVHASWLFLPFHRYYLYFNERILAKLIDDPTFALPYWAWDNPDGMYMPTIYASSPSSLYDEKRNAKHLPPTVIDLDYDGTEPTIPDDELKTDNLAIMYKQIVSGATTPKLFLGYPYRAGDAIDPGAGTLEHAPHNIVHKWTGLADKPSEDMGNFYTAGRDPIFFGHHANVDRMWNIWKTIGGKNRKDFTDTDWLDATFVFYDENKQLVKVKVSDCVDTSKLRYQYQDIPIPWLPKNTKAKAKTTTKSSKSGVAKAAELPKTTISSIGDFPKALNSVIRVEVPRPKKSRSKKEKEDEEEVLLIKGIELDRENFVKFDVYINDEDYSVSRPKNSEFAGSFVNVPHKHMKEMKTKTNLRFAINELLEDLGAEDDESVIVTIVPRAGGDDVTIGGIEIEFVSD", generic_protein)
 	start_seq2 = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
 	target_seq = Seq("F", generic_protein)
-	main([start_seq, start_seq2], transformations.TRANSFORMATIONS, 
-		target_seq, args.max_length)
+	print report.report(findTransformations([start_seq, start_seq2], 
+		transformations.TRANSFORMATIONS, target_seq, args.max_length))

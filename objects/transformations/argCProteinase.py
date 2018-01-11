@@ -11,7 +11,7 @@ class ArgCProteinase(transformation.Transformation):
 		return self._enzymeCleave('---R----', input_aas)
 
 	def cost(self):
-		return 12
+		return 1
 
 	def name(self):
 		return "Arg-C Proteinase"

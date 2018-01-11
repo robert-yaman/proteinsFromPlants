@@ -11,7 +11,7 @@ class Caspase1(transformation.Transformation):
 		return self._enzymeCleave('FWYL--HAT-D-^PEDQKR---', input_aas)
 
 	def cost(self):
-		return 12
+		return 1
 
 	def name(self):
 		return "Caspase 1"

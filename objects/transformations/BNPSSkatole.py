@@ -11,7 +11,7 @@ class BNPSSkatole(transformation.Transformation):
 		return self._enzymeCleave('---W----', input_aas)
 
 	def cost(self):
-		return 12
+		return 1
 
 	def name(self):
 		return "BNPS-Skatole"

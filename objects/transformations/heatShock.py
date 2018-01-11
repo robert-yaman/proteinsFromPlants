@@ -16,7 +16,7 @@ class HeatShock(transformation.Transformation):
 		return returnAAs
 
 	def cost(self):
-		return 100
+		return 1
 
 	def name(self):
 		return "Heat Shock"

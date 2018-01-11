@@ -19,7 +19,7 @@ class AddProtein(transformation.Transformation):
 		return output_aas
 
 	def cost(self):
-		return 25
+		return 1
 
 	def name(self):
 		prefix = self.protein[0:4]

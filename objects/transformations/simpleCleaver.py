@@ -68,11 +68,6 @@ class SimpleCleaver(transformation.Transformation):
 						not sequence[p_index_on_sequence] in positive_list[p]):
 						cleave = False
 
-					# print "sequence len " + str(len(sequence))
-					# print "p_index_on_sequence " + str(p_index_on_sequence)
-					# print "condition : " + str(p_index_on_sequence < 0 or 
-					# 	p_index_on_sequence >= len(sequence))
-					# print "i " + str(i)
 					if (negative_list[p] and 
 						sequence[p_index_on_sequence] in negative_list[p]):
 						cleave = False

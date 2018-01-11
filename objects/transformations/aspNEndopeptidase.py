@@ -13,7 +13,7 @@ class AspNEndopeptidase(transformation.Transformation):
 		return self._enzymeCleave('----DQ---', input_aas)
 
 	def cost(self):
-		return 12
+		return 1
 
 	def name(self):
 		return "Asp-N Endopeptidase"
