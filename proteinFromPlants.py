@@ -13,9 +13,11 @@ from sequenceSet import SequenceSet
 import report
 
 def findTransformations(start_seqs, transformation_modules, target_seq, 
-	max_length):
+	max_cost):
 	lowest_score_per_set = {}
-	cheapest_success = [float("inf")]
+	# Initialize the cheapest cost to max_cost so we don't consider anything
+	# more expensive.
+	cheapest_success = [max_cost]
 
 	def should_process_from_state(sequence_set, transformation_chain):
 		if not sequence_set in lowest_score_per_set:
@@ -27,14 +29,14 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 	def should_process_new_chain(transformation_chain):
 		# Don't continue search if our cost already succeed the cheapest chain
 		# to obtain the target.
-		return total_cost(transformation_chain) < cheapest_success[0]	 
+		return total_cost(transformation_chain) < cheapest_success[0]
 
 	def process(sequence_set, transformation_chain):
 		# Returns transformation chain that yields the target seq, or None if
 		# there is none.
-		if len(transformation_chain) > max_length:
-			print "ERROR: length %d greater than max length %d." % (
-				len(transformation_chain), max_length)
+		if total_cost(transformation_chain) > max_cost:
+			print "ERROR: cost %d greater than max cost %d." % (
+				total_cost(transformation_chain), max_cost)
 		if not should_process_from_state(sequence_set, transformation_chain):
 			return None
 		lowest_score_per_set[sequence_set] = total_cost(transformation_chain)
@@ -48,11 +50,10 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 		}
 
 		if sequence_set.isExactly(target_seq):
-			if total_cost(transformation_chain) < cheapest_success[0]:
-				cheapest_success[0] = total_cost(transformation_chain)
+			total_cost_ = total_cost(transformation_chain)
+			if total_cost_ < cheapest_success[0]:
+				cheapest_success[0] = total_cost_
 			return transformation_chain
-		elif len(transformation_chain) == max_length:
-			return None
 		else:
 			answer = None
 			for transformation_module in transformation_modules:
@@ -89,17 +90,19 @@ if __name__ == '__main__':
 		required=True,
 	)
 	parser.add_argument(
-		'--max-length',
-		default=10,
+		'--max-cost',
+		default=7,
 		type=int,
 	)
 
 	args = parser.parse_args()
+
 	transformations = importlib.import_module(args.transformations)
 	# Load passed in module.
 
 	start_seq = Seq("MASLPWSLTTSTAIANTTNISAFPPSPLFQRASHVPVARNRSRRFAPSKVSCNSANGDPNSDSTSDVRETSSGKLDRRNVLLGIGGLYGAAGGLGATKPLAFGAPIQAPDISKCGTATVPDGVTPTNCCPPVTTKIIDFQLPSSGSPMRTRPAAHLVSKEYLAKYKKAIELQKALPDDDPRSFKQQANVHCTYCQGAYDQVGYTDLELQVHASWLFLPFHRYYLYFNERILAKLIDDPTFALPYWAWDNPDGMYMPTIYASSPSSLYDEKRNAKHLPPTVIDLDYDGTEPTIPDDELKTDNLAIMYKQIVSGATTPKLFLGYPYRAGDAIDPGAGTLEHAPHNIVHKWTGLADKPSEDMGNFYTAGRDPIFFGHHANVDRMWNIWKTIGGKNRKDFTDTDWLDATFVFYDENKQLVKVKVSDCVDTSKLRYQYQDIPIPWLPKNTKAKAKTTTKSSKSGVAKAAELPKTTISSIGDFPKALNSVIRVEVPRPKKSRSKKEKEDEEEVLLIKGIELDRENFVKFDVYINDEDYSVSRPKNSEFAGSFVNVPHKHMKEMKTKTNLRFAINELLEDLGAEDDESVIVTIVPRAGGDDVTIGGIEIEFVSD", generic_protein)
 	start_seq2 = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
 	target_seq = Seq("F", generic_protein)
-	print report.report(findTransformations([start_seq, start_seq2], 
-		transformations.TRANSFORMATIONS, target_seq, args.max_length))
+	output = findTransformations([start_seq, start_seq2], 
+		transformations.TRANSFORMATIONS, target_seq, args.max_cost)
+	print report.report(output[0], output[1], output[2])

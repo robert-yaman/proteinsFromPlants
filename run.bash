@@ -1,1 +1,1 @@
-python proteinFromPlants.py --transformations objects.transformations.allTransformations --max-length 5
+python proteinFromPlants.py --transformations objects.transformations.allTransformations --max-cost 7 

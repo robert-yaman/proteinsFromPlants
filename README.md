@@ -6,9 +6,8 @@
 	- Parralel execution.
 - Generate full report
 - Purification step only happens at the end? This will greatly help efficiency since purification blows up as proteins cleave.
-- Don't continue graph search if current cost is more than the lowest found cost!!!
-	- then directly algs could speed up avg runtime
 - Use max cost rather than max length
+- Use smart alg to figure out which node to process next. Because of early returning, this will speed up avg case.
 
 # Limitations
 
