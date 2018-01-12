@@ -15,11 +15,19 @@ import report
 def findTransformations(start_seqs, transformation_modules, target_seq, 
 	max_length):
 	lowest_score_per_set = {}
-	def stop_search(sequence_set, transformation_chain):
+	cheapest_success = [float("inf")]
+
+	def should_process_from_state(sequence_set, transformation_chain):
 		if not sequence_set in lowest_score_per_set:
-			return False
-		return lowest_score_per_set[sequence_set] <= total_cost(
+			return True
+
+		return lowest_score_per_set[sequence_set] > total_cost(
 			transformation_chain)
+
+	def should_process_new_chain(transformation_chain):
+		# Don't continue search if our cost already succeed the cheapest chain
+		# to obtain the target.
+		return total_cost(transformation_chain) < cheapest_success[0]	 
 
 	def process(sequence_set, transformation_chain):
 		# Returns transformation chain that yields the target seq, or None if
@@ -27,16 +35,21 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 		if len(transformation_chain) > max_length:
 			print "ERROR: length %d greater than max length %d." % (
 				len(transformation_chain), max_length)
-		if stop_search(sequence_set, transformation_chain):
+		if not should_process_from_state(sequence_set, transformation_chain):
 			return None
 		lowest_score_per_set[sequence_set] = total_cost(transformation_chain)
 
 		params = {
 			"start_seqs" : start_seqs,
 			"sequence_set" : sequence_set,
+			# For tesing.
+			"cheapest_success" : cheapest_success[0],
+			"transformation_chain" : transformation_chain,
 		}
 
 		if sequence_set.isExactly(target_seq):
+			if total_cost(transformation_chain) < cheapest_success[0]:
+				cheapest_success[0] = total_cost(transformation_chain)
 			return transformation_chain
 		elif len(transformation_chain) == max_length:
 			return None
@@ -47,6 +60,8 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 					transformations(params))
 				for transformation in transformation_instances:
 					new_chain = transformation_chain + [transformation]
+					if not should_process_new_chain(new_chain):
+						continue
 					child_answer = process(transformation.transform(
 						sequence_set), new_chain)
 					if not child_answer == None:

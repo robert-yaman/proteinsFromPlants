@@ -3,6 +3,7 @@ import sys
 import unittest
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
+from sets import Set
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 sys.path.insert(1, os.path.join(sys.path[0], '../objects'))
@@ -10,6 +11,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '../objects'))
 import fakeTransformation
 
 from proteinFromPlants import findTransformations
+from proteinFromPlants import total_cost
 from objects.transformations import addProtein
 from objects.transformations import heatShock
 from objects.transformations import purification
@@ -51,6 +53,36 @@ class E2eTest(unittest.TestCase):
 		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
 
 		self.assertEqual(output[0], None)
+
+	def test_stops_search_when_cost_is_above_cheapest_success(self):
+		# Since the fake transformation doesnt modify the sequence set, there 
+		# shouldn't be two fake transformations with the same sequence set.
+		start_seqs = [
+			Seq("AFT", generic_protein), 
+			Seq("CFQ", generic_protein),
+		]
+		target_seq = Seq("C", generic_protein)
+		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
+
+		for item in self.work_list:
+			params = item[1]
+			self.assertTrue(params["cheapest_success"] >=
+				total_cost(params["transformation_chain"]))
+
+
+	def test_never_has_two_fake_transitions(self):
+		# Since the fake transformation doesnt modify the sequence set, there 
+		# shouldn't be two fake transformations with the same sequence set.
+		start_seqs = [
+			Seq("AFT", generic_protein), 
+			Seq("CFQ", generic_protein),
+		]
+		target_seq = Seq("C", generic_protein)
+		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
+
+		sequence_sets = [item[1]["sequence_set"] for item in self.work_list]
+		self.assertEqual(len(sequence_sets), len(Set(sequence_sets)))
+
 
 if __name__ == '__main__':
 	unittest.main()

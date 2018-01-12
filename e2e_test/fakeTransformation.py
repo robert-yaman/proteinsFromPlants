@@ -4,11 +4,14 @@ from objects.transformations import transformation
 WORK_LIST = []
 
 def transformations(params):
-	return [FakeTransformation()]
+	return [FakeTransformation(params)]
 
 class FakeTransformation(transformation.Transformation):
+	def __init__(self, params):
+		self.params = params
+
 	def transform(self, input_aas):
-		WORK_LIST.append(input_aas)
+		WORK_LIST.append([input_aas, self.params])
 		return input_aas
 
 	def cost(self):
