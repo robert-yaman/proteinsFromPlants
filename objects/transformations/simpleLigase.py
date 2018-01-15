@@ -131,14 +131,3 @@ class SimpleLigase(transformation.Transformation):
 					combined_frequency)
 
 		return output_sequences
-
-
-
-
-
-
-
-
-
-
-
