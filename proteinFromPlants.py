@@ -1,4 +1,5 @@
 import argparse
+import csv
 import importlib
 import time
 import os
@@ -86,7 +87,17 @@ if __name__ == '__main__':
 
 	parser.add_argument(
 		'--transformations',
-		help="Module that holds the transformations.",
+		help="Python module that holds the transformations.",
+		required=True,
+	)
+	parser.add_argument(
+		'--starters',
+		help='CSV with the starter proteins. First column is sequence, second is cost per unit.',
+		required=True,
+	)
+	parser.add_argument(
+		'--target',
+		help='TXT file with the target sequence.',
 		required=True,
 	)
 	parser.add_argument(
@@ -103,11 +114,18 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	transformations = importlib.import_module(args.transformations)
-	# Load passed in module.
 
-	start_seq = Seq("MASLPWSLTTSTAIANTTNISAFPPSPLFQRASHVPVARNRSRRFAPSKVSCNSANGDPNSDSTSDVRETSSGKLDRRNVLLGIGGLYGAAGGLGATKPLAFGAPIQAPDISKCGTATVPDGVTPTNCCPPVTTKIIDFQLPSSGSPMRTRPAAHLVSKEYLAKYKKAIELQKALPDDDPRSFKQQANVHCTYCQGAYDQVGYTDLELQVHASWLFLPFHRYYLYFNERILAKLIDDPTFALPYWAWDNPDGMYMPTIYASSPSSLYDEKRNAKHLPPTVIDLDYDGTEPTIPDDELKTDNLAIMYKQIVSGATTPKLFLGYPYRAGDAIDPGAGTLEHAPHNIVHKWTGLADKPSEDMGNFYTAGRDPIFFGHHANVDRMWNIWKTIGGKNRKDFTDTDWLDATFVFYDENKQLVKVKVSDCVDTSKLRYQYQDIPIPWLPKNTKAKAKTTTKSSKSGVAKAAELPKTTISSIGDFPKALNSVIRVEVPRPKKSRSKKEKEDEEEVLLIKGIELDRENFVKFDVYINDEDYSVSRPKNSEFAGSFVNVPHKHMKEMKTKTNLRFAINELLEDLGAEDDESVIVTIVPRAGGDDVTIGGIEIEFVSD", generic_protein)
-	start_seq2 = Seq("YQPPSTNKNTKSQRRKGSTFEEHK", generic_protein)
-	target_seq = Seq("F", generic_protein)
-	output = findTransformations([start_seq, start_seq2], 
+	with open(args.target, 'r') as target_file:
+		target_sequence = target_file.read()[0].rstrip()
+		target_seq = Seq(target_sequence, generic_protein)
+
+	start_seqs_path = args.starters
+	with open(start_seqs_path, 'r') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',')
+		start_seqs = [[Seq(row[0], generic_protein), int(row[1]
+			)] for row in reader]
+
+	output = findTransformations(start_seqs, 
 		transformations.TRANSFORMATIONS, target_seq, args.max_cost)
+	
 	print report.report(output[0], output[1], output[2], args.verbose)

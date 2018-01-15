@@ -30,7 +30,7 @@ class E2eTest(unittest.TestCase):
 		]
 
 	def test_base_case(self):
-		start_seqs = [Seq("AFT", generic_protein)]
+		start_seqs = [[Seq("AFT", generic_protein), 1]]
 		target_seq = Seq("A", generic_protein)
 		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
 		transformation_chain = output[0]
@@ -48,7 +48,7 @@ class E2eTest(unittest.TestCase):
 		self.assertEqual(third_transformation.name(), "Purify A")
 
 	def test_impossible(self):
-		start_seqs = [Seq("AFT", generic_protein)]
+		start_seqs = [[Seq("AFT", generic_protein), 1]]
 		target_seq = Seq("L", generic_protein)
 		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
 
@@ -58,8 +58,8 @@ class E2eTest(unittest.TestCase):
 		# Since the fake transformation doesnt modify the sequence set, there 
 		# shouldn't be two fake transformations with the same sequence set.
 		start_seqs = [
-			Seq("AFT", generic_protein), 
-			Seq("CFQ", generic_protein),
+			[Seq("AFT", generic_protein), 1], 
+			[Seq("CFQ", generic_protein), 1],
 		]
 		target_seq = Seq("C", generic_protein)
 		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
@@ -74,8 +74,8 @@ class E2eTest(unittest.TestCase):
 		# Since the fake transformation doesnt modify the sequence set, there 
 		# shouldn't be two fake transformations with the same sequence set.
 		start_seqs = [
-			Seq("AFT", generic_protein), 
-			Seq("CFQ", generic_protein),
+			[Seq("AFT", generic_protein), 1], 
+			[Seq("CFQ", generic_protein), 1],
 		]
 		target_seq = Seq("C", generic_protein)
 		output = findTransformations(start_seqs, self.transformations, target_seq, 6)

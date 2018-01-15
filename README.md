@@ -14,7 +14,6 @@
 	transformations. We can define this dynamically in init - if giving an 
 	empty set yields a non-empty set.
 - Make a more nuanced picture of the quantites after a ligase is applied.
-- Dynamic inputs for script.
 
 # Limitations
 

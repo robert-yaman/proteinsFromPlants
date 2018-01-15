@@ -1,14 +1,17 @@
+import csv
+
 import transformation
-from cost import Cost
 from sequenceSet import SequenceSet
 
 def transformations(params):
-	start_proteins = params['start_seqs']
-	return [AddProtein(protein) for protein in start_proteins]
+	# |start_seqs| is a list of lists (starter_sequence, starter_cost).
+	start_seqs = params['start_seqs']
+	return [AddProtein(starter[0], starter[1]) for starter in start_seqs]
 
 class AddProtein(transformation.Transformation):
-	def __init__(self, protein):
+	def __init__(self, protein, cost):
 		self.protein = protein
+		self.cost_val = cost
 
 	def transform(self, input_aas):
 		output_aas = SequenceSet()
@@ -19,7 +22,7 @@ class AddProtein(transformation.Transformation):
 		return output_aas
 
 	def cost(self):
-		return 1
+		return self.cost_val
 
 	def name(self):
 		prefix = self.protein[0:4]

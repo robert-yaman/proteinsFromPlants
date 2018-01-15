@@ -1,1 +1,1 @@
-python proteinFromPlants.py --transformations objects.transformations.allTransformations --max-cost 7 
+python proteinFromPlants.py --transformations objects.transformations.allTransformations --starters testStarters.csv --target testTarget.txt --max-cost 7
