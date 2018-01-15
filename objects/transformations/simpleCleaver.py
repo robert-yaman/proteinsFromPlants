@@ -1,7 +1,6 @@
 import csv
 
 import transformation
-from cost import Cost
 from sequenceSet import SequenceSet
 
 def transformations(params):
@@ -26,19 +25,8 @@ class SimpleCleaver(transformation.Transformation):
 		return self.name_val
 
 	def _enzymeCleave(self, code, sequence_set):
-		code_list = code.split("-")
-		# Disjunctive positive conditions for area around possible cleavage 
-		# site.
-		positive_list = []
-		# Conjunctive negative conditions.
-		negative_list = []
-		for item in code_list:
-			split_item = item.split("^")
-			positive_list.append(split_item[0])
-			if len(split_item) == 1:
-				negative_list.append("")
-			else:
-				negative_list.append(split_item[1])
+		positive_list, negative_list = self.parse_code(code)
+
 		# On each sequence, indicates indices that should be cleaved at the
 		# C-terminal.
 		cleaveage_sites = {}

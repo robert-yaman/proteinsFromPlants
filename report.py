@@ -9,9 +9,9 @@ def short_report(transformation_chain, total_cost, time_elapsed):
 def long_report(transformation_chain):
 	return "TODO: long report."
 
-def report(transformation_chain, total_cost, time_elapsed):
+def report(transformation_chain, total_cost, time_elapsed, verbose):
 	"""Generates a human readable report about the transformation chain."""
 	short = short_report(transformation_chain, total_cost, time_elapsed)
 	long_ = long_report(transformation_chain)
-	return short + "\n ########## \n" + long_
+	return short + "\n ########## \n" + long_ if verbose else short
 

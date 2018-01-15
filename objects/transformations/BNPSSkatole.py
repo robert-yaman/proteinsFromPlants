@@ -1,5 +1,4 @@
 import transformation
-from cost import Cost
 from sequenceSet import SequenceSet
 
 def transformations(params):

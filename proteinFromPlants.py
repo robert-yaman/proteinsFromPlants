@@ -94,6 +94,11 @@ if __name__ == '__main__':
 		default=7,
 		type=int,
 	)
+	parser.add_argument(
+		'--verbose',
+		default=False,
+		type=bool,
+	)
 
 	args = parser.parse_args()
 
@@ -105,4 +110,4 @@ if __name__ == '__main__':
 	target_seq = Seq("F", generic_protein)
 	output = findTransformations([start_seq, start_seq2], 
 		transformations.TRANSFORMATIONS, target_seq, args.max_cost)
-	print report.report(output[0], output[1], output[2])
+	print report.report(output[0], output[1], output[2], args.verbose)
