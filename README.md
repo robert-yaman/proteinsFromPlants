@@ -33,6 +33,20 @@ transformation modules. Each transformation module should have a method
 A `params` dictionary is passed into the `transformations` method that can
 assist in transformation object creation.
 
+The usage cleaving enzymes and ligases are defined in ./cleavers.csv and 
+./ligases.csv respectively. The columns of the csvs are defined as follows:
+- The name of the enzyme
+- The enzyme's code. This code signifies the 8-length amino acid sequence that 
+the enzyme will act on. The middle (4th) position is the cleaving position, or
+the position at which the proteins will be binded. Each position can have 
+either positive conditions or negative conditions (signified by '^'). If there
+is a positive conditions, then the sequence at that position must be one of the
+listed amino acids. If there is a negative condition, the sequence at that
+position must not be any of the listed amino acids.
+- The cost
+- A link to more info about the enzyme
+- Comments
+
 An example usage can be run by:
 
 `bash run.bash`
