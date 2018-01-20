@@ -15,6 +15,7 @@ from proteinFromPlants import total_cost
 from objects.transformations import addProtein
 from objects.transformations import heatShock
 from objects.transformations import purification
+from objects.transformations import BNPSSkatole
 
 class E2eTest(unittest.TestCase):
 	def setUp(self):
@@ -46,6 +47,25 @@ class E2eTest(unittest.TestCase):
 
 		third_transformation = transformation_chain[2]
 		self.assertEqual(third_transformation.name(), "Purify A")
+
+	def test_long_target(self):
+		self.transformations.append(BNPSSkatole)
+		start_seqs = [[Seq("AWFT", generic_protein), 1]]
+		target_seq = Seq("FT", generic_protein)
+		output = findTransformations(start_seqs, self.transformations, target_seq, 6)
+		transformation_chain = output[0]
+
+		# Add AFT -> Heat shock -> purification
+		self.assertEqual(len(transformation_chain), 3)
+
+		first_transformation = transformation_chain[0]
+		self.assertEqual(first_transformation.name(), "Add AWFT")
+
+		second_transformation = transformation_chain[1]
+		self.assertEqual(second_transformation.name(), "BNPS-Skatole")
+
+		third_transformation = transformation_chain[2]
+		self.assertEqual(third_transformation.name(), "Purify FT")
 
 	def test_impossible(self):
 		start_seqs = [[Seq("AFT", generic_protein), 1]]
