@@ -71,4 +71,4 @@ An example usage can be run by:
 	- If we don't have the total AAs we need, only perform "additive" 
 	transformations. We can define this dynamically in init - if giving an 
 	empty set yields a non-empty set.
-- Improve pose-ligase sequence quantities.
+- Improve pose-ligase sequence quantities (float quantities?).

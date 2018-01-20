@@ -17,7 +17,7 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 	max_cost):
 	lowest_score_per_set = {}
 	# Initialize the cheapest cost to max_cost so we don't consider anything
-	# more expensive.
+	# more expensive. Wrapped in a list for mutability.
 	cheapest_success = [max_cost]
 
 	def should_process_from_state(sequence_set, transformation_chain):
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 	transformations = importlib.import_module(args.transformations)
 
 	with open(args.target, 'r') as target_file:
-		target_sequence = target_file.read()[0].rstrip()
+		target_sequence = target_file.read().rstrip()
 		target_seq = Seq(target_sequence, generic_protein)
 
 	start_seqs_path = args.starters
