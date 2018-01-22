@@ -28,7 +28,7 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 			transformation_chain)
 
 	def should_process_new_chain(transformation_chain):
-		# Don't continue search if our cost already succeed the cheapest chain
+		# Don't continue search if our cost already exceeds the cheapest chain
 		# to obtain the target.
 		return total_cost(transformation_chain) < cheapest_success[0]
 
@@ -67,7 +67,8 @@ def findTransformations(start_seqs, transformation_modules, target_seq,
 					child_answer = process(transformation.transform(
 						sequence_set), new_chain)
 					if not child_answer == None:
-						if answer == None or len(child_answer) < len(answer):
+						if (answer == None or 
+							total_cost(child_answer) < total_cost(answer)):
 							answer = child_answer
 			return answer
 
