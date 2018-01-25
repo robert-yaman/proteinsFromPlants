@@ -51,6 +51,10 @@ An example usage can be run by:
 
 `bash run.bash`
 
+## Dependencies
+
+You need BioPython to use this library. Install [here](http://biopython.org/DIST/docs/install/Installation.html#htoc4).
+
 # Limitations
 
 - Our algorithm won't find parallel workflows - e.g. apply an enzyme to a protein, then another enzyme to another protein, then combine them.
